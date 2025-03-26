@@ -13,7 +13,7 @@ const database = new Databases(client);
 export const updateSearchCount = async (searchTerm, movie) => {
  try {
   const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-    Query.equal('searchTerm', searchTerm),
+    Query.equal('searchTerm', [searchTerm]),
   ])
 
   if(result.documents.length > 0) {
@@ -22,7 +22,6 @@ export const updateSearchCount = async (searchTerm, movie) => {
    await database.updateDocument(DATABASE_ID, COLLECTION_ID, doc.$id, {
     count: doc.count + 1,
    })
-  
   } else {
    await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
     searchTerm,
